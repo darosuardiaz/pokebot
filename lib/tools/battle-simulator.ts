@@ -1,4 +1,4 @@
-import { getPokemonData, type PokemonData } from "./pokemon-api"
+import { getPokemonData, type PokemonData } from "../services/pokeapi"
 
 interface BattleResult {
   winner: string

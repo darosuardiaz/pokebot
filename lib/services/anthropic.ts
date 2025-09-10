@@ -1,4 +1,4 @@
-import { getPokemonData } from "@/lib/tools/pokemon-api"
+import { getPokemonData } from "@/lib/services/pokeapi"
 import { simulatePokemonBattle } from "@/lib/tools/battle-simulator"
 
 /**

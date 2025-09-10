@@ -7,7 +7,7 @@ import { Badge } from "@/components/ui/badge"
 import { Sword, Trophy, Zap, Shield } from "lucide-react"
 import { simulatePokemonBattle, simulateTeamBattle, type TeamBattleResult } from "@/lib/tools/battle-simulator"
 import { useAppSelector } from "@/lib/hooks"
-import type { PokemonData } from "@/lib/tools/pokemon-api"
+import type { PokemonData } from "@/lib/services/pokeapi"
 import { typeColors } from "@/lib/constants"
 
 interface BattleResult {

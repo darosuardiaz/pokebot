@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button"
 import { Heart, Sword } from "lucide-react"
 import { useAppDispatch, useAppSelector } from "@/lib/hooks"
 import { addToFavorites, removeFromFavorites, addToBattleTeam } from "@/lib/features/pokemon/pokemonSlice"
-import type { PokemonData } from "@/lib/tools/pokemon-api"
+import type { PokemonData } from "@/lib/services/pokeapi"
 import { typeColors } from "@/lib/constants"
 
 interface PokemonCardProps {
