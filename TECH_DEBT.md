@@ -1,13 +1,7 @@
 
 ## Architectural
 
-1.  **Centralize API Logic:** The logic for fetching data from `pokeapi.co` is currently present in both `lib/tools/pokemon-api.ts` and `lib/tools/battle-simulator.ts`. This should be consolidated into a single, dedicated service (e.g., `lib/services/pokeapi.ts`). This will improve maintainability, reduce code duplication, and make it easier to implement caching or other API-related features.
-
 2.  **Refine State Management:** The application uses Redux effectively for managing global state. However, some component-level state could be moved to Redux to better manage the application's overall state. For example, the battle state in `components/battle/battle-arena.tsx` (e.g., `selectedPokemon1`, `selectedPokemon2`, `battleResult`) could be managed in the `pokemonSlice` or a new `battleSlice`.
-
-3.  **Component Decomposition:** Some components have grown quite large and handle multiple responsibilities. Breaking them down into smaller, more focused components would improve readability and reusability.
-    *   `components/battle/battle-arena.tsx`: This component could be split into `SingleBattle`, `TeamBattle`, and `BattleResult` components.
-    *   `components/chat/chat-interface.tsx`: The chat input and message list could be extracted into their own components.
 
 ## Specific Code Improvements
 
