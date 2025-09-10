@@ -3,8 +3,9 @@ I think that as a general the challenging thing was the correct stream handling 
 Apart from that I think the architecture is pretty straightforward. I decided to use Redux for managing the state application to make it more robust and there's a minimal service layer for the poke and Anthropic APIs.
 
 TODOs
-* Add Auth and persist data like Pokemon Teams to a database (probably supabase)
-* Support Multiplayer Battles
 * Refine the prompt, not completely happy on the generated output besides tool calling
 * Implement Evolution Chain Tool
+* Add Auth and persist data like Pokemon Teams to a database (probably supabase)
+* Include Favorites Section
+* Support Multiplayer Battles
 * Technical Debt (documented in `TECH_DEBT.md`)

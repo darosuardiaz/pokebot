@@ -18,3 +18,32 @@ export const typeColors: Record<string, string> = {
   steel: "bg-gray-500",
   fairy: "bg-pink-300",
 }
+
+export const typeChart: Record<string, { strong: string[]; weak: string[]; immune?: string[] }> = {
+  fire: { strong: ["grass", "ice", "bug", "steel"], weak: ["water", "ground", "rock"] },
+  water: { strong: ["fire", "ground", "rock"], weak: ["grass", "electric"] },
+  grass: { strong: ["water", "ground", "rock"], weak: ["fire", "ice", "poison", "flying", "bug"] },
+  electric: { strong: ["water", "flying"], weak: ["ground"], immune: ["ground"] },
+  psychic: { strong: ["fighting", "poison"], weak: ["bug", "ghost", "dark"], immune: ["dark"] },
+  ice: { strong: ["grass", "ground", "flying", "dragon"], weak: ["fire", "fighting", "rock", "steel"] },
+  dragon: { strong: ["dragon"], weak: ["ice", "dragon", "fairy"], immune: ["fairy"] },
+  dark: { strong: ["psychic", "ghost"], weak: ["fighting", "bug", "fairy"] },
+  fairy: { strong: ["fighting", "dragon", "dark"], weak: ["poison", "steel"] },
+  fighting: {
+    strong: ["normal", "ice", "rock", "dark", "steel"],
+    weak: ["flying", "psychic", "fairy"],
+    immune: ["ghost"],
+  },
+  poison: { strong: ["grass", "fairy"], weak: ["ground", "psychic"] },
+  ground: {
+    strong: ["fire", "electric", "poison", "rock", "steel"],
+    weak: ["water", "grass", "ice"],
+    immune: ["flying"],
+  },
+  flying: { strong: ["grass", "fighting", "bug"], weak: ["electric", "ice", "rock"] },
+  bug: { strong: ["grass", "psychic", "dark"], weak: ["fire", "flying", "rock"] },
+  rock: { strong: ["fire", "ice", "flying", "bug"], weak: ["water", "grass", "fighting", "ground", "steel"] },
+  ghost: { strong: ["psychic", "ghost"], weak: ["ghost", "dark"], immune: ["normal", "fighting"] },
+  steel: { strong: ["ice", "rock", "fairy"], weak: ["fire", "fighting", "ground"] },
+  normal: { strong: [], weak: ["fighting"], immune: ["ghost"] },
+};
