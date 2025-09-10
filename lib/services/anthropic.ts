@@ -1,45 +1,6 @@
 import { getPokemonData } from "@/lib/services/pokeapi"
 import { simulatePokemonBattle } from "@/lib/tools/battle-simulator"
-
-/**
- * Minimal chat message shape expected by Anthropic's Messages API.
- */
-export interface ChatMessage {
-  role: "user" | "assistant"
-  content: string
-}
-
-/**
- * Internal representation of a tool invocation emitted by the model.
- */
-export interface ToolCall {
-  id: string
-  name: string
-  input: Record<string, unknown>
-}
-
-/**
- * Normalized stream events surfaced to the SSE layer. These map Anthropic's
- * streaming chunks into a compact set of event types consumed by the UI.
- */
-export interface StreamEvent {
-  type:
-    | "message_start"
-    | "content_block_start"
-    | "text_delta"
-    | "tool_result"
-    | "tool_error"
-    | "error"
-    | "content_block_stop"
-    | "message_stop"
-  text?: string
-  content_block?: any
-  message?: any
-  tool_call_id?: string
-  result?: any
-  error?: string
-  stop_reason?: string
-}
+import type { ChatMessage, StreamEvent, ToolCall } from "@/lib/types"
 
 /**
  * Singleton wrapper around the Anthropic SDK providing:
@@ -118,7 +79,7 @@ class AnthropicServiceClass {
           currentToolCall = {
             id: chunk.content_block.id,
             name: chunk.content_block.name,
-            input: {},
+            arguments: {},
             partialInput: "",
           }
         }
@@ -142,9 +103,9 @@ class AnthropicServiceClass {
         if (currentToolCall) {
           try {
             const inputString = currentToolCall.partialInput || "{}"
-            currentToolCall.input = JSON.parse(inputString)
+            currentToolCall.arguments = JSON.parse(inputString)
 
-            if (!currentToolCall.input || typeof currentToolCall.input !== "object") {
+            if (!currentToolCall.arguments || typeof currentToolCall.arguments !== "object") {
               throw new Error("Invalid tool input format - expected object")
             }
 
@@ -190,15 +151,15 @@ class AnthropicServiceClass {
   private async executeTool(toolCall: ToolCall): Promise<any> {
     switch (toolCall.name) {
       case "get_pokemon_data":
-        const pokemon = toolCall.input?.pokemon
+        const pokemon = toolCall.arguments?.pokemon
         if (!pokemon || typeof pokemon !== "string") {
           throw new Error("Pokemon name is required and must be a string")
         }
         return await getPokemonData(pokemon.trim())
 
       case "pokemon_battle_simulator":
-        const pokemon1 = toolCall.input?.pokemon1
-        const pokemon2 = toolCall.input?.pokemon2
+        const pokemon1 = toolCall.arguments?.pokemon1
+        const pokemon2 = toolCall.arguments?.pokemon2
 
         if (!pokemon1 || typeof pokemon1 !== "string") {
           throw new Error("Pokemon1 name is required and must be a string")

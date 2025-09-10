@@ -3,22 +3,23 @@
 import { Button } from "@/components/ui/button"
 import { Trophy } from "lucide-react"
 import type { PokemonData } from "@/lib/services/pokeapi"
-import { useAppSelector } from "@/lib/hooks"
+import { useAppSelector, useAppDispatch } from "@/lib/hooks"
+import { setIsLoading } from "@/lib/features/battle/battleSlice"
 import { simulateTeamBattle } from "@/lib/tools/battle-simulator"
 
 interface TeamBattleProps {
   onBattleStart: (result: any) => void
-  isLoading: boolean
-  setIsLoading: (isLoading: boolean) => void
 }
 
-export function TeamBattle({ onBattleStart, isLoading, setIsLoading }: TeamBattleProps) {
+export function TeamBattle({ onBattleStart }: TeamBattleProps) {
+  const dispatch = useAppDispatch()
   const { battleTeam } = useAppSelector((state) => state.pokemon)
+  const { isLoading } = useAppSelector((state) => state.battle)
 
   const handleTeamBattle = async () => {
     if (battleTeam.length < 2) return
 
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
     try {
       const team1 = battleTeam.slice(0, Math.ceil(battleTeam.length / 2))
       const team2 = battleTeam.slice(Math.ceil(battleTeam.length / 2))
@@ -27,7 +28,7 @@ export function TeamBattle({ onBattleStart, isLoading, setIsLoading }: TeamBattl
     } catch (_error) {
       // Handle team battle error
     } finally {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
     }
   }
 

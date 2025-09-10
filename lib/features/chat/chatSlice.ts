@@ -1,24 +1,5 @@
 import { createSlice, type PayloadAction } from "@reduxjs/toolkit"
-
-export interface Message {
-  id: string
-  role: "user" | "assistant"
-  content: string
-  timestamp: number
-  isStreaming?: boolean
-  toolCalls?: ToolCall[]
-  error?: string
-  streamCompleted?: boolean
-}
-
-export interface ToolCall {
-  id: string
-  name: string
-  arguments: Record<string, unknown>
-  result?: any
-}
-
-type ChatStatus = 'idle' | 'loading' | 'streaming';
+import type { ChatStatus, Message, ToolCall } from "@/lib/types"
 
 interface ChatState {
   messages: Message[]

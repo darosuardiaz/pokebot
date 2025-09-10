@@ -1,40 +1,32 @@
 "use client"
 
-import { useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Sword, Shield } from "lucide-react"
+import { useAppSelector, useAppDispatch } from "@/lib/hooks"
+import {
+  setBattleMode,
+  setBattleResult,
+  setTeamBattleResult,
+  setIsLoading,
+} from "@/lib/features/battle/battleSlice"
 import type { TeamBattleResult } from "@/lib/tools/battle-simulator"
-import { useAppSelector } from "@/lib/hooks"
-import type { PokemonData } from "@/lib/services/pokeapi"
+import type { SingleBattleResult } from "@/lib/features/battle/battleSlice"
 import { SingleBattle } from "./single-battle"
 import { TeamBattle } from "./team-battle"
 import { BattleResult as BattleResultComponent } from "./battle-result"
 
-interface BattleResult {
-  winner: string
-  loser: string
-  winnerStats: PokemonData
-  loserStats: PokemonData
-  battleAnalysis: string
-  typeAdvantage: string | null
-}
-
 export function BattleArena() {
+  const dispatch = useAppDispatch()
   const { battleTeam } = useAppSelector((state) => state.pokemon)
-  const [battleResult, setBattleResult] = useState<BattleResult | null>(null)
-  const [teamBattleResult, setTeamBattleResult] = useState<TeamBattleResult | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
-  const [battleMode, setBattleMode] = useState<"single" | "team">("single")
+  const { battleResult, teamBattleResult, isLoading, battleMode } = useAppSelector((state) => state.battle)
 
-  const handleSingleBattleResult = (result: BattleResult) => {
-    setBattleResult(result)
-    setTeamBattleResult(null)
+  const handleSingleBattleResult = (result: SingleBattleResult) => {
+    dispatch(setBattleResult(result))
   }
 
   const handleTeamBattleResult = (result: TeamBattleResult) => {
-    setTeamBattleResult(result)
-    setBattleResult(null)
+    dispatch(setTeamBattleResult(result))
   }
 
   return (
@@ -49,14 +41,14 @@ export function BattleArena() {
             <Button
               variant={battleMode === "single" ? "default" : "outline"}
               size="sm"
-              onClick={() => setBattleMode("single")}
+              onClick={() => dispatch(setBattleMode("single"))}
             >
               Single Battle
             </Button>
             <Button
               variant={battleMode === "team" ? "default" : "outline"}
               size="sm"
-              onClick={() => setBattleMode("team")}
+              onClick={() => dispatch(setBattleMode("team"))}
               disabled={battleTeam.length < 2}
             >
               Team Battle
@@ -65,22 +57,14 @@ export function BattleArena() {
         </CardHeader>
         <CardContent>
           {battleMode === "single" ? (
-            <SingleBattle
-              onBattleStart={handleSingleBattleResult}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-            />
+            <SingleBattle onBattleStart={handleSingleBattleResult} />
           ) : (
-            <TeamBattle
-              onBattleStart={handleTeamBattleResult}
-              isLoading={isLoading}
-              setIsLoading={setIsLoading}
-            />
+            <TeamBattle onBattleStart={handleTeamBattleResult} />
           )}
         </CardContent>
       </Card>
 
-      <BattleResultComponent battleResult={battleResult} teamBattleResult={teamBattleResult} />
+      <BattleResultComponent />
 
       {battleTeam.length === 0 && (
         <Card>

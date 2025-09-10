@@ -1,6 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit"
 import chatReducer from "./features/chat/chatSlice"
 import pokemonReducer from "./features/pokemon/pokemonSlice"
+import battleReducer from "./features/battle/battleSlice"
 
 /**
  * Global Redux store configuration for the app.
@@ -16,6 +17,7 @@ export const store = configureStore({
   reducer: {
     chat: chatReducer,
     pokemon: pokemonReducer,
+    battle: battleReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

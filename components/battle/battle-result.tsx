@@ -3,23 +3,12 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Trophy } from "lucide-react"
-import type { PokemonData } from "@/lib/services/pokeapi"
 import { typeColors } from "@/lib/constants"
-import type { TeamBattleResult } from "@/lib/tools/battle-simulator"
+import { useAppSelector } from "@/lib/hooks"
 
-interface BattleResultProps {
-  battleResult: {
-    winner: string
-    loser: string
-    winnerStats: PokemonData
-    loserStats: PokemonData
-    battleAnalysis: string
-    typeAdvantage: string | null
-  } | null
-  teamBattleResult: TeamBattleResult | null
-}
+export function BattleResult() {
+  const { battleResult, teamBattleResult } = useAppSelector((state) => state.battle)
 
-export function BattleResult({ battleResult, teamBattleResult }: BattleResultProps) {
   if (!battleResult && !teamBattleResult) {
     return null
   }

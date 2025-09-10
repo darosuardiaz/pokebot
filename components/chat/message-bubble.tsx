@@ -3,9 +3,15 @@
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { User, Bot, Loader2, Zap, Search } from "lucide-react"
-import type { Message } from "@/lib/features/chat/chatSlice"
+import type { Message } from "ai"
 import { MarkdownRenderer } from "./markdown-renderer"
 import { PokemonCard } from "@/components/pokemon/pokemon-card"
+import {
+  isBattleResult,
+  isPokemonData,
+  isToolError,
+  ToolResult,
+} from "@/lib/types"
 
 interface MessageBubbleProps {
   message: Message
@@ -51,12 +57,12 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                       </div>
                       {toolCall.result && (
                         <div className="space-y-2">
-                          {toolCall.result.error ? (
+                          {isToolError(toolCall.result) ? (
                             <div className="text-destructive text-sm">Error: {toolCall.result.error}</div>
-                          ) : toolCall.result.id ? (
+                          ) : isPokemonData(toolCall.result) ? (
                             // Pokemon data result
                             <PokemonCard pokemon={toolCall.result} showActions={true} />
-                          ) : toolCall.result.winner ? (
+                          ) : isBattleResult(toolCall.result) ? (
                             // Battle result
                             <div className="space-y-2">
                               <div className="text-center">
@@ -69,7 +75,9 @@ export function MessageBubble({ message }: MessageBubbleProps) {
                           ) : (
                             // Fallback for other results
                             <div className="text-xs text-muted-foreground">
-                              <pre className="whitespace-pre-wrap">{JSON.stringify(toolCall.result, null, 2)}</pre>
+                              <pre className="whitespace-pre-wrap">
+                                {JSON.stringify(toolCall.result, null, 2)}
+                              </pre>
                             </div>
                           )}
                         </div>

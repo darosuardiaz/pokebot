@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef } from "react"
-import { sendMessage, parseStreamResponse, type ChatMessage, type StreamEvent } from "@/lib/api/chat"
+import { sendMessage, parseStreamResponse } from "@/lib/api/chat"
+import type { ChatMessage, StreamEvent } from "@/lib/types"
 import { useAppDispatch } from "@/lib/hooks"
 import {
   addMessage,

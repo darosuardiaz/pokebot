@@ -1,19 +1,4 @@
-/**
- * Minimal chat message passed from UI to the server.
- */
-export interface ChatMessage {
-  role: "user" | "assistant"
-  content: string
-}
-
-/**
- * Generic shape for events yielded by the server SSE. The route sends
- * JSON-encoded objects with a `type` discriminator.
- */
-export interface StreamEvent {
-  type: string
-  [key: string]: unknown
-}
+import type { ChatMessage, StreamEvent } from "@/lib/types"
 
 /**
  * POST the chat transcript to the Next.js route. The route responds with

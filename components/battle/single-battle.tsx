@@ -1,34 +1,36 @@
 "use client"
 
-import { useState } from "react"
 import { Button } from "@/components/ui/button"
 import { Zap } from "lucide-react"
 import type { PokemonData } from "@/lib/services/pokeapi"
-import { useAppSelector } from "@/lib/hooks"
+import { useAppSelector, useAppDispatch } from "@/lib/hooks"
+import {
+  setSelectedPokemon1,
+  setSelectedPokemon2,
+  setIsLoading,
+} from "@/lib/features/battle/battleSlice"
 import { simulatePokemonBattle } from "@/lib/tools/battle-simulator"
 
 interface SingleBattleProps {
   onBattleStart: (result: any) => void
-  isLoading: boolean
-  setIsLoading: (isLoading: boolean) => void
 }
 
-export function SingleBattle({ onBattleStart, isLoading, setIsLoading }: SingleBattleProps) {
+export function SingleBattle({ onBattleStart }: SingleBattleProps) {
+  const dispatch = useAppDispatch()
   const { battleTeam } = useAppSelector((state) => state.pokemon)
-  const [selectedPokemon1, setSelectedPokemon1] = useState<PokemonData | null>(null)
-  const [selectedPokemon2, setSelectedPokemon2] = useState<PokemonData | null>(null)
+  const { selectedPokemon1, selectedPokemon2, isLoading } = useAppSelector((state) => state.battle)
 
   const handleSingleBattle = async () => {
     if (!selectedPokemon1 || !selectedPokemon2) return
 
-    setIsLoading(true)
+    dispatch(setIsLoading(true))
     try {
       const result = await simulatePokemonBattle(selectedPokemon1.name, selectedPokemon2.name)
       onBattleStart(result)
     } catch (_error) {
       // Handle battle error
     } finally {
-      setIsLoading(false)
+      dispatch(setIsLoading(false))
     }
   }
 
@@ -43,7 +45,7 @@ export function SingleBattle({ onBattleStart, isLoading, setIsLoading }: SingleB
                 key={pokemon.id}
                 variant={selectedPokemon1?.id === pokemon.id ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedPokemon1(pokemon as unknown as PokemonData)}
+                onClick={() => dispatch(setSelectedPokemon1(pokemon as unknown as PokemonData))}
                 className="justify-start"
               >
                 <img
@@ -65,7 +67,7 @@ export function SingleBattle({ onBattleStart, isLoading, setIsLoading }: SingleB
                 key={pokemon.id}
                 variant={selectedPokemon2?.id === pokemon.id ? "default" : "outline"}
                 size="sm"
-                onClick={() => setSelectedPokemon2(pokemon as unknown as PokemonData)}
+                onClick={() => dispatch(setSelectedPokemon2(pokemon as unknown as PokemonData))}
                 disabled={selectedPokemon1?.id === pokemon.id}
                 className="justify-start"
               >
